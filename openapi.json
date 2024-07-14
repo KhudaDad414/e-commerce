@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "TODO API",
+    "title": "Books API",
     "version": "1.0.0",
-    "description": "API for Managing CRUD operations for TODO API."
+    "description": "API for Managing CRUD operations for Books API."
   },
   "servers": [
     {
@@ -12,380 +12,124 @@
     }
   ],
   "paths": {
-    "/todos": {
+    "/books": {
       "get": {
-        "summary": "get all of the Todos for a specific user.",
         "tags": [
-          "Todos"
+          "Books"
         ],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "description": "Get All of the books.",
         "responses": {
           "200": {
-            "description": "Success.",
+            "description": "Request was successful.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "isCompleted": {
-                        "type": "boolean"
-                      },
-                      "title": {
-                        "type": "string"
-                      },
-                      "id": {
-                        "type": "number"
-                      },
-                      "userId": {
-                        "type": "number"
-                      }
-                    }
+                    "$ref": "#/components/schemas/Book"
                   }
                 }
               }
             }
           },
-          "401": {
-            "description": "Access denied."
-          },
           "500": {
-            "description": "Some server error"
+            "description": "Internal Server Error."
           }
         }
       },
       "post": {
-        "summary": "Create a new Todo Item.",
         "tags": [
-          "Todos"
+          "Books"
         ],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "description": "Create a new book item.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "isCompleted",
-                  "title"
-                ],
-                "properties": {
-                  "isCompleted": {
-                    "type": "boolean"
-                  },
-                  "title": {
-                    "type": "string"
-                  }
-                }
+                "$ref": "#/components/schemas/BookCreate"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Todo item created.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "isCompleted": {
-                      "type": "boolean"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "type": "number"
-                    },
-                    "userId": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Access denied."
+            "description": "Book item created successfully."
           },
           "500": {
-            "description": "Some server error"
+            "description": "Internal Server Error."
           }
         }
       }
     },
-    "/todos/{id}": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "number"
-          }
-        }
-      ],
+    "/books/{id}": {
       "patch": {
-        "summary": "Update a TODO Item",
         "tags": [
-          "Todos"
+          "Books"
         ],
-        "security": [
+        "parameters": [
           {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "isCompleted",
-                  "title"
-                ],
-                "properties": {
-                  "isCompleted": {
-                    "type": "boolean"
-                  },
-                  "title": {
-                    "type": "string"
-                  }
-                }
-              }
+            "in": "path",
+            "required": true,
+            "name": "id",
+            "description": "Id of the book that you want to update.",
+            "schema": {
+              "type": "integer"
             }
           }
-        },
+        ],
+        "description": "update book information.",
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "Update one of the fields of the books.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "isCompleted": {
-                      "type": "boolean"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "type": "number"
-                    },
-                    "userId": {
-                      "type": "number"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Book"
                 }
               }
             }
-          },
-          "401": {
-            "description": "Access denied."
-          },
-          "500": {
-            "description": "Some server error."
-          }
-        }
-      },
-      "delete": {
-        "summary": "Update a TODO Item",
-        "tags": [
-          "Todos"
-        ],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "isCompleted": {
-                      "type": "boolean"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "type": "number"
-                    },
-                    "userId": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Access denied."
-          },
-          "500": {
-            "description": "Some server error."
-          }
-        }
-      }
-    },
-    "/users": {
-      "post": {
-        "summary": "Register a new user",
-        "tags": [
-          "Users"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "name",
-                  "email",
-                  "password"
-                ],
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "The user was created successfully"
-          },
-          "409": {
-            "description": "Email Already exists"
-          },
-          "500": {
-            "description": "Some server error"
-          }
-        }
-      }
-    },
-    "/users/login": {
-      "post": {
-        "summary": "Login a user into the system",
-        "tags": [
-          "Users"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "email",
-                  "password"
-                ],
-                "properties": {
-                  "email": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "User has successfully logged-in.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "token"
-                  ],
-                  "properties": {
-                    "token": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "User or password is invalid"
           },
           "500": {
             "description": "Server Error."
           }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BaseBook"
+              }
+            }
+          }
         }
-      }
-    },
-    "/users/profile": {
-      "get": {
-        "summary": "Get the current logged in user's profile.",
+      },
+      "delete": {
         "tags": [
-          "Users"
+          "Books"
         ],
-        "security": [
+        "description": "delete book by id.",
+        "parameters": [
           {
-            "bearerAuth": []
+            "in": "path",
+            "required": true,
+            "name": "id",
+            "description": "Id of the book that you want to delete.",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "User has successfully logged-in.",
+            "description": "Book removed successfully.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "name",
-                    "email",
-                    "id"
-                  ],
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Book"
                 }
               }
             }
-          },
-          "401": {
-            "description": "Invalid Token."
           },
           "500": {
             "description": "Server Error."
@@ -395,22 +139,79 @@
     }
   },
   "components": {
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+    "schemas": {
+      "BaseBook": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "isbn": {
+            "type": "string"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "pageCount": {
+            "type": "integer"
+          },
+          "language": {
+            "type": "string"
+          },
+          "genre": {
+            "type": "string"
+          }
+        }
+      },
+      "BookCreate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseBook"
+          },
+          {
+            "type": "object",
+            "required": [
+              "title",
+              "author",
+              "language"
+            ]
+          }
+        ]
+      },
+      "Book": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseBook"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "title",
+              "author",
+              "language"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              }
+            }
+          }
+        ]
       }
     }
   },
   "tags": [
     {
-      "name": "Todos",
-      "description": "Todo management"
-    },
-    {
-      "name": "Users",
-      "description": "User management"
+      "name": "Books",
+      "description": "API's related to book management."
     }
   ]
 }
