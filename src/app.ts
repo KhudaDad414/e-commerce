@@ -12,10 +12,11 @@ import { generateOpenApiSpec } from './utils/generateOpenAPI';
 
 const app: Express = express()
 //Add middlewares
-app.use(express.json())
-app.use((error:any,req:any,res:any,next:any)=>{
-  res.status(500).json({message: "something went wrong."})
+app.use((req,res,next) => {
+  console.log(`${req.method} ${req.path}`)
+  next();
 })
+app.use(express.json())
 
 //Initialize OpenAPI docs
 const spec = swaggerJSDoc(options)
@@ -26,6 +27,8 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(spec))
 app.use("/api",router)
 
 
+//Logging
+//Error Handling
 const port = process.env.PORT! || 3000;
 app.listen(port, ()=> {
   console.log(`[server] Server is running at port ${port}`)

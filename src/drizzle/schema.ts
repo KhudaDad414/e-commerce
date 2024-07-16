@@ -2,6 +2,17 @@ import { pgTable, text, serial, integer, date  } from 'drizzle-orm/pg-core';
 
 
 
+
+export const urls = pgTable("urls", {
+  id: serial("id").primaryKey(),
+  url: text("url").unique().notNull(),
+  shortHand: text("shortHand").unique().notNull()
+})
+
+
+export type NewUrl = typeof urls.$inferInsert
+export type URL = typeof urls.$inferSelect
+
 export const books = pgTable("books", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
